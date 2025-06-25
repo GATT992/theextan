@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f0f0f0;
+    }
+    #result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Cek Username di GitHub</h2>
+  <input type="text" id="usernameInput" placeholder="Masukkan username">
+  <button onclick="checkUsername()">Cek</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function checkUsername() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const resultDiv = document.getElementById('result');
+
+      if (!username) {
+        resultDiv.innerText = 'Harap isi username!';
+        return;
+      }
+
+      // Contoh file GitHub yang dicek
+      const fileUrl = `https://raw.githubusercontent.com/GATT992/theextan/refs/heads/main/username.json`;
+
+      try {
+        const res = await fetch(fileUrl);
+        if (res.ok) {
+          // Jika file ditemukan
+          resultDiv.innerText = 'Username ada';
+          window.location.href = `./extan.html`;
+        } else {
+          // Jika file tidak ditemukan (404)
+          resultDiv.innerText = 'Username tidak ada';
+        }
+      } catch (err) {
+        resultDiv.innerText = 'Terjadi kesalahan saat memeriksa';
+      }
+    }
+  </script>
+
+</body>
+</html>
