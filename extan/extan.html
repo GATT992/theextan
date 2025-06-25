@@ -1,1 +1,127 @@
-<iframe src="http://nodev.storedigital.web.id:3002"></iframe>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The extan Web</title>
+</head>
+<style>
+ /* Base Styles */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Card Container */
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 320px;
+  padding: 25px;
+  text-align: center;
+}
+
+/* Header Styles */
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.header h2 {
+  font-size: 1.8rem;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Form Elements */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.options {
+  margin: 20px 0;
+}
+
+.option {
+  padding: 12px;
+  margin: 8px 0;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+</style>
+<body align="center">
+<div class="card">
+  <div class="header">
+  <h1>The Extan</h1>
+ <h2 style="color: red">Web</h2>
+ </div>
+  <form id="form">
+    <input type="number" id="target" class="input-field" placeholder="Nomor (628xxxx)" required><br>
+<div class="options">
+    <button type="button" onclick="setCommand('asu')" class="option" >Fc -No Invis</button>
+    <button type="button" onclick="setCommand('Invis')" class="option" >Invis Unli</button>
+    <button type="button" onclick="setCommand('delayhard')" class="option" >DelayHard</button><br><br>
+</div>
+    <input type="hidden" id="command" value="">
+    <button type="submit" class="submit-btn">Gas Send!</button>
+  </form>
+</div>
+  <div id="response"></div>
+
+  <script>
+    function setCommand(cmd) {
+      document.getElementById('command').value = cmd;
+    }
+
+    document.getElementById('form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const target = document.getElementById('target').value;
+      const command = document.getElementById('command').value;
+
+      if (!command) return alert("Pilih Bug nya dlu dulu!");
+
+      const res = await fetch('http://nodev.storedigital.web.id:3002/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target, command })
+      });
+
+      const data = await res.text();
+      document.getElementById('response').innerText = data;
+    });
+  </script>
+</body>
+</html>
