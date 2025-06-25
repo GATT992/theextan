@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
+  <title>Cek Username</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 40px;
-      background: #f0f0f0;
+      background: #f5f5f5;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
     }
     #result {
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 20px;
       color: red;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h2>Cek Username di GitHub</h2>
+  <h2>Cek Username</h2>
   <input type="text" id="usernameInput" placeholder="Masukkan username">
   <button onclick="checkUsername()">Cek</button>
 
@@ -25,29 +29,33 @@
 
   <script>
     async function checkUsername() {
-      const username = document.getElementById('usernameInput').value.trim();
-      const resultDiv = document.getElementById('result');
+      const inputName = document.getElementById("usernameInput").value.trim().toLowerCase();
+      const resultDiv = document.getElementById("result");
 
-      if (!username) {
-        resultDiv.innerText = 'Harap isi username!';
+      if (!inputName) {
+        resultDiv.textContent = "Harap isi username!";
         return;
       }
 
-      // Contoh file GitHub yang dicek
-      const fileUrl = `https://raw.githubusercontent.com/GATT992/theextan/refs/heads/main/username.json`;
+      const url = 'https://raw.githubusercontent.com/GATT992/theextan/refs/heads/main/username.json';
 
       try {
-        const res = await fetch(fileUrl);
-        if (res.ok) {
-          // Jika file ditemukan
-          
-          window.location.href = `/extan/extan.html`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          resultDiv.textContent = "Gagal memuat data.";
+          return;
+        }
+
+        const list = await response.json();
+
+        if (Array.isArray(list) && list.includes(inputName)) {
+          // Jika ditemukan, redirect ke halaman extan
+          window.location.href = "/extan/extan.html";
         } else {
-          // Jika file tidak ditemukan (404)
-          resultDiv.innerText = 'Username tidak ada';
+          resultDiv.textContent = "Username tidak ada.";
         }
       } catch (err) {
-        resultDiv.innerText = 'Terjadi kesalahan saat memeriksa';
+        resultDiv.textContent = "Terjadi kesalahan jaringan.";
       }
     }
   </script>
