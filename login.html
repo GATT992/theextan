@@ -29,33 +29,39 @@
 
   <script>
     async function checkUsername() {
-      const inputName = document.getElementById("usernameInput").value.trim().toLowerCase();
+      const username = document.getElementById("usernameInput").value.trim().toLowerCase();
       const resultDiv = document.getElementById("result");
 
-      if (!inputName) {
+      if (!username) {
         resultDiv.textContent = "Harap isi username!";
         return;
       }
 
-      const url = 'https://raw.githubusercontent.com/GATT992/theextan/main/username.json';
+      const url = "https://raw.githubusercontent.com/GATT992/theextan/main/username.json";
 
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          resultDiv.textContent = "Gagal memuat data.";
+          resultDiv.textContent = "Gagal memuat data (status: " + response.status + ")";
           return;
         }
 
-        const list = await response.json();
+        const data = await response.json();
 
-        if (Array.isArray(list) && list.includes(inputName)) {
-          // Jika ditemukan, redirect ke halaman extan
+        if (!Array.isArray(data)) {
+          resultDiv.textContent = "Format JSON harus array.";
+          return;
+        }
+
+        if (data.includes(username)) {
           window.location.href = "/extan/extan.html";
         } else {
           resultDiv.textContent = "Username tidak ada.";
         }
-      } catch (err) {
+
+      } catch (error) {
         resultDiv.textContent = "Terjadi kesalahan jaringan.";
+        console.error(error);
       }
     }
   </script>
